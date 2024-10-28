@@ -43,6 +43,9 @@ dependencies:
   http: ^1.2.2
   webview_dart: ^1.0.1
   webview_flutter_platform_interface: ^2.0.2
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
 
 dev_dependencies:
   flutter_test:

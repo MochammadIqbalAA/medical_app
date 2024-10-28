@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/app/modules/home/views/profile_view.dart';
 import 'package:myapp/app/page/home_page.dart'; // Pastikan untuk mengimpor halaman Medic
+import 'package:myapp/app/page/appointment_page.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -132,6 +133,12 @@ class HomeView extends StatelessWidget {
           } else if (index == 4) {
             // Jika Profile ditekan
             Get.to(ProfileView());
+          } else if (index == 2) {
+            // Jika Profile ditekan
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AppointmentPage()),
+            );
           }
         },
       ),
