@@ -36,15 +36,14 @@ class ForumController {
 
     if (available) {
       isListening = true;
-      // Mendapatkan locale yang tersedia
       var locales = await _speech.locales();
-      print('Available locales: $locales'); // Debugging log
+      print('Available locales: $locales'); 
 
       _speech.listen(
         onResult: (result) {
-          speechText = result.recognizedWords; // Mengupdate teks yang terdeteksi
-          messageController.text = speechText; // Memasukkan teks ke TextField
-          onUpdate(); // Memperbarui state di view
+          speechText = result.recognizedWords; // update text
+          messageController.text = speechText; // textfiels
+          onUpdate();
         },
         localeId: 'id_ID',
       );

@@ -8,6 +8,8 @@ abstract class Routes {
   static const LOGIN_PAGE = _Paths.LOGIN_PAGE;
   static const APPOINTMENT = _Paths.APPOINTMENT;
   static const FORUM = _Paths.FORUM;
+  static const FIND_US_PAGE = _Paths.FIND_US_PAGE;
+  static const CONNECTION = _Paths.CONNECTION;
 }
 
 abstract class _Paths {
@@ -17,4 +19,6 @@ abstract class _Paths {
   static const LOGIN_PAGE = '/login-page';
   static const APPOINTMENT = '/appointment';
   static const FORUM = '/forum';
+  static const FIND_US_PAGE = '/find-us-page';
+  static const CONNECTION = '/connection';
 }

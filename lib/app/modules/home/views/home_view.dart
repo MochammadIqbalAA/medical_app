@@ -4,7 +4,7 @@ import 'package:myapp/app/modules/home/views/profile_view.dart';
 import 'package:myapp/app/page/home_page.dart'; // Pastikan untuk mengimpor halaman Medic
 import 'package:myapp/app/modules/appointment/views/appointment_page.dart';
 import 'package:myapp/app/modules/Forum/views/ForumPage.dart';
-
+import 'package:myapp/app/modules/FindUsPage/views/find_us_page_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -14,30 +14,30 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFDDF5FF),
       appBar: AppBar(
-  title: const Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text('Hi, Diddy’s!', style: TextStyle(fontSize: 18)),
-      Text('How Are you today?', style: TextStyle(fontSize: 14)),
-    ],
-  ),
-  actions: [
-    IconButton(
-      icon: const Icon(Icons.notifications),
-      onPressed: () {
-        // Tambahkan fungsi notifikasi di sini
-      },
-    ),
-    IconButton(
-      icon: const Icon(Icons.forum), // Icon forum
-      onPressed: () {
-        // Navigasi ke halaman forum
-        Get.to(ForumPage()); // Ganti dengan halaman forum Anda
-      },
-    ),
-  ],
-  backgroundColor: const Color(0xFFDDF5FF),
-),
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Hi, Diddy’s!', style: TextStyle(fontSize: 18)),
+            Text('How Are you today?', style: TextStyle(fontSize: 14)),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              // Tambahkan fungsi notifikasi di sini
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.forum), // Icon forum
+            onPressed: () {
+              // Navigasi ke halaman forum
+              Get.to(ForumPage()); // Ganti dengan halaman forum Anda
+            },
+          ),
+        ],
+        backgroundColor: const Color(0xFFDDF5FF),
+      ),
 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -105,6 +105,13 @@ class HomeView extends StatelessWidget {
                 ],
               ),
             ),
+            // Tombol untuk membuka halaman lokasi (FindUsPage)
+            ElevatedButton(
+              onPressed: () {
+                Get.to(FindUsPage()); // Menavigasi ke FindUsPage
+              },
+              child: const Text('Find Us', style: TextStyle(fontSize: 18)),
+            ),
           ],
         ),
       ),
@@ -147,7 +154,7 @@ class HomeView extends StatelessWidget {
             // Jika Profile ditekan
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AppointmentPage()),
+              MaterialPageRoute(builder: (context) => AppointmentView()),
             );
           }
         },
