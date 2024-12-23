@@ -17,20 +17,20 @@ class AppointmentController extends GetxController {
     _listenConnectivity();
   }
 
-  // Mengecek koneksi awal
+ 
   Future<void> _checkConnectivity() async {
     List<ConnectivityResult> results = await Connectivity().checkConnectivity();
     _validateConnection(results);
   }
 
-  // Mendengarkan perubahan koneksi
+
   void _listenConnectivity() {
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
       _validateConnection(results);
     });
   }
 
-  // Validasi koneksi dengan ping ke google.com
+
   Future<void> _validateConnection(List<ConnectivityResult> results) async {
     if (results.contains(ConnectivityResult.wifi) || results.contains(ConnectivityResult.mobile)) {
       try {
@@ -43,7 +43,6 @@ class AppointmentController extends GetxController {
       isConnected.value = false;
     }
 
-    // Tampilkan status koneksi
     Get.snackbar(
       "Koneksi Internet",
       isConnected.value ? "Terhubung ke internet" : "Tidak ada koneksi internet",
@@ -55,7 +54,9 @@ class AppointmentController extends GetxController {
     if (isConnected.value) retryPendingUploads();
   }
 
-  // Fungsi menambahkan janji temu
+
+
+
   void addAppointment(Map<String, dynamic> data) async {
     if (isConnected.value) {
       try {

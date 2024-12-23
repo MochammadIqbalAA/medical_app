@@ -9,19 +9,23 @@ class AppointmentView extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _complaintController = TextEditingController();
+  String? _selectedDoctor;
 
   // Dialog Tambah atau Update Janji Temu
-  void _showAppointmentDialog(BuildContext context, {String? id, Map<String, dynamic>? data}) {
+  void _showAppointmentDialog(BuildContext context,
+      {String? id, Map<String, dynamic>? data}) {
     if (data != null) {
       // Jika Update, isi form dengan data yang ada
       _nameController.text = data['name'];
       _dateController.text = data['date'];
       _complaintController.text = data['complaint'];
+      _selectedDoctor = data['doctor']; // Mengisi dokter saat update
     } else {
       // Jika Tambah, kosongkan form
       _nameController.clear();
       _dateController.clear();
       _complaintController.clear();
+      _selectedDoctor = null;
     }
 
     showDialog(
@@ -43,7 +47,8 @@ class AppointmentView extends StatelessWidget {
                   ),
                   TextFormField(
                     controller: _dateController,
-                    decoration: InputDecoration(labelText: 'Tanggal (DD/MM/YYYY)'),
+                    decoration:
+                        InputDecoration(labelText: 'Tanggal (DD/MM/YYYY)'),
                     validator: (value) =>
                         value!.isEmpty ? 'Silakan masukkan tanggal' : null,
                   ),
@@ -52,6 +57,43 @@ class AppointmentView extends StatelessWidget {
                     decoration: InputDecoration(labelText: 'Keluhan'),
                     validator: (value) =>
                         value!.isEmpty ? 'Silakan masukkan keluhan' : null,
+                  ),
+                  // Dropdown untuk memilih dokter
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('doctor') // Koleksi doctor
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+
+                      if (!snapshot.hasData) {
+                        return Text('Tidak ada data dokter');
+                      }
+
+                      // Mengambil data nama dokter dari Firestore
+                      final doctors = snapshot.data!.docs
+                          .map((doc) => doc['nama_dokter'] as String)
+                          .toList();
+
+                      return DropdownButtonFormField<String>(
+                        value: _selectedDoctor,
+                        hint: Text('Pilih Dokter'),
+                        onChanged: (String? newValue) {
+                          _selectedDoctor = newValue;
+                        },
+                        validator: (value) =>
+                            value == null ? 'Silakan pilih dokter' : null,
+                        items: doctors
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -69,11 +111,13 @@ class AppointmentView extends StatelessWidget {
                     'name': _nameController.text,
                     'date': _dateController.text,
                     'complaint': _complaintController.text,
+                    'doctor': _selectedDoctor, // Menambahkan dokter
                   };
                   if (id == null) {
                     _controller.addAppointment(appointmentData); // Tambah data
                   } else {
-                    _controller.updateAppointment(id, appointmentData); // Update data
+                    _controller.updateAppointment(
+                        id, appointmentData); // Update data
                   }
                   Navigator.of(context).pop();
                 }
@@ -120,7 +164,8 @@ class AppointmentView extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => _showAppointmentDialog(context), // Dialog Tambah Janji Temu
+            onPressed: () =>
+                _showAppointmentDialog(context), // Dialog Tambah Janji Temu
           ),
         ],
       ),
@@ -144,7 +189,9 @@ class AppointmentView extends StatelessWidget {
           // Data janji temu dari Firestore
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('appointments').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('appointments')
+                  .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
@@ -159,7 +206,8 @@ class AppointmentView extends StatelessWidget {
                       margin: EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Text('Nama: ${appointment['name']}'),
-                        subtitle: Text('Tanggal: ${appointment['date']} \nKeluhan: ${appointment['complaint']}'),
+                        subtitle: Text(
+                            'Tanggal: ${appointment['date']} \nKeluhan: ${appointment['complaint']} \nDokter: ${appointment['doctor']}'), // Menampilkan dokter
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -173,13 +221,16 @@ class AppointmentView extends StatelessWidget {
                                     'name': appointment['name'],
                                     'date': appointment['date'],
                                     'complaint': appointment['complaint'],
+                                    'doctor': appointment[
+                                        'doctor'], // Menyertakan dokter
                                   },
                                 );
                               },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _showDeleteConfirmation(context, appointment.id),
+                              onPressed: () => _showDeleteConfirmation(
+                                  context, appointment.id),
                             ),
                           ],
                         ),

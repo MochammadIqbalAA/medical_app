@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myapp/app/modules/home/views/profile_view.dart';
-import 'package:myapp/app/page/home_page.dart'; // Pastikan untuk mengimpor halaman Medic
+import 'package:myapp/app/page/home_page.dart';
 import 'package:myapp/app/modules/appointment/views/appointment_page.dart';
 import 'package:myapp/app/modules/Forum/views/ForumPage.dart';
 import 'package:myapp/app/modules/FindUsPage/views/find_us_page_view.dart';
@@ -17,7 +18,7 @@ class HomeView extends StatelessWidget {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hi, Diddy’s!', style: TextStyle(fontSize: 18)),
+            Text('Hi, Diddy!', style: TextStyle(fontSize: 18)),
             Text('How Are you today?', style: TextStyle(fontSize: 14)),
           ],
         ),
@@ -29,22 +30,19 @@ class HomeView extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.forum), // Icon forum
+            icon: const Icon(Icons.forum),
             onPressed: () {
-              // Navigasi ke halaman forum
-              Get.to(ForumPage()); // Ganti dengan halaman forum Anda
+              Get.to(ForumPage());
             },
           ),
         ],
         backgroundColor: const Color(0xFFDDF5FF),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Rectangle with text
             Container(
               padding: const EdgeInsets.all(16.0),
               width: double.infinity,
@@ -69,54 +67,66 @@ class HomeView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Doctor Specialty title
             const Text(
               'Doctor Speciality',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-
-            // 4 Circular Menu
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildSpecialityCircle('General'),
-                _buildSpecialityCircle('Neurologic'),
-                _buildSpecialityCircle('Pediatric'),
-                _buildSpecialityCircle('Radiology'),
+                _buildSpecialityCircle('General',
+                    imagePath: 'lib/app/assets/umum.png'),
+                _buildSpecialityCircle('Neurologic',
+                    imagePath: 'lib/app/assets/neurologic.png'),
+                _buildSpecialityCircle('Pediatric',
+                    imagePath: 'lib/app/assets/pediatric.png'),
+                _buildSpecialityCircle('Radiology',
+                    imagePath: 'lib/app/assets/radiology.png'),
               ],
             ),
-            const SizedBox(height: 20),
-
-            // Recommendation Doctor title
+            const SizedBox(height: 10),
             const Text(
               'Recommendation Doctor',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-
-            // Doctor Recommendation cards
             Expanded(
-              child: ListView(
-                children: [
-                  _buildDoctorCard('Dr. John Doe', 'Cardiologist'),
-                  _buildDoctorCard('Dr. Jane Smith', 'Pediatrician'),
-                ],
+              child: StreamBuilder<QuerySnapshot>(
+                stream:
+                    FirebaseFirestore.instance.collection('doctor').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Text('Something went wrong');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  return ListView(
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+                      return _buildDoctorCard(
+                        data['nama_dokter'] ?? '',
+                        data['spesialis'] ?? '',
+                      );
+                    }).toList(),
+                  );
+                },
               ),
             ),
-            // Tombol untuk membuka halaman lokasi (FindUsPage)
             ElevatedButton(
               onPressed: () {
-                Get.to(FindUsPage()); // Menavigasi ke FindUsPage
+                Get.to(FindUsPage());
               },
               child: const Text('Find Us', style: TextStyle(fontSize: 18)),
             ),
           ],
         ),
       ),
-
-      // Sticky Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -145,13 +155,10 @@ class HomeView extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           if (index == 3) {
-            // Jika Schedule ditekan
-            Get.to(HomePage()); // Navigasi ke halaman Medic
+            Get.to(HomePage());
           } else if (index == 4) {
-            // Jika Profile ditekan
             Get.to(ProfileView());
           } else if (index == 2) {
-            // Jika Profile ditekan
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AppointmentView()),
@@ -162,17 +169,18 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // Circle for Doctor Speciality
-  Widget _buildSpecialityCircle(String text) {
+  Widget _buildSpecialityCircle(String text, {String imagePath = ''}) {
     return Column(
       children: [
         Container(
           width: 80,
           height: 80,
-          decoration: const BoxDecoration(
+          padding: const EdgeInsets.all(
+              17), // Menambahkan padding di Container utama
+          decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 4,
@@ -180,11 +188,14 @@ class HomeView extends StatelessWidget {
               ),
             ],
           ),
-          child: const Center(
-            child: Icon(
-              Icons.local_hospital,
-              color: Color(0xFF151855),
-              size: 30,
+          child: Container(
+            decoration: BoxDecoration(
+              image: imagePath.isNotEmpty
+                  ? DecorationImage(
+                      image: AssetImage(imagePath),
+                      fit: BoxFit.contain,
+                    )
+                  : null,
             ),
           ),
         ),
@@ -194,21 +205,51 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // Doctor Card for Recommendation Section
   Widget _buildDoctorCard(String name, String speciality) {
     return Card(
-      child: SizedBox(
-        height: 120,
-        child: ListTile(
-          leading: const CircleAvatar(
-            backgroundImage: AssetImage('assets/default_profile.png'),
-          ),
-          title: Text(name),
-          subtitle: Text(speciality),
-          trailing: const Icon(Icons.arrow_forward),
-          onTap: () {
-            // Navigasi ke detail dokter atau fungsionalitas lainnya
-          },
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            const CircleAvatar(
+              radius: 35,
+              backgroundImage: AssetImage('assets/default_profile.png'),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    speciality,
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.arrow_forward_ios),
+              onPressed: () {
+                // Navigasi ke detail dokter
+              },
+            ),
+          ],
         ),
       ),
     );
