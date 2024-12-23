@@ -134,10 +134,6 @@ class HomeView extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Message',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.schedule),
             label: 'Search',
           ),
@@ -156,9 +152,9 @@ class HomeView extends StatelessWidget {
         onTap: (index) {
           if (index == 3) {
             Get.to(HomePage());
-          } else if (index == 4) {
+          } else if (index == 3) {
             Get.to(ProfileView());
-          } else if (index == 2) {
+          } else if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AppointmentView()),

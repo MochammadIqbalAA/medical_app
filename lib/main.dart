@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
         // Menampilkan halaman sesuai status koneksi
         if (isConnected) {
-          return HomeView();  // Ganti dengan tampilan home
+          return LoginPageView();  // Ganti dengan tampilan home
         } else {
           return NoConnectionScreen();  // Ganti dengan tampilan jika tidak ada koneksi
         }
