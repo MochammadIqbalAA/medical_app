@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-
+import '../modules/DoctorDetailPage/bindings/doctor_detail_page_binding.dart';
+import '../modules/DoctorDetailPage/views/doctor_detail_page_view.dart';
 import '../modules/FindUsPage/bindings/find_us_page_binding.dart';
 import '../modules/FindUsPage/views/find_us_page_view.dart';
 import '../modules/Forum/bindings/forum_binding.dart';
@@ -58,5 +59,20 @@ class AppPages {
       page: () => ConnectionView(),
       binding: ConnectionBinding(),
     ),
+    GetPage(
+      name: _Paths.DOCTOR_DETAIL_PAGE,
+      page: () {
+      // Mengambil parameter yang diperlukan untuk halaman ini
+      final namaDokter = Get.parameters['nama_dokter'] ?? 'Unknown Doctor';
+
+      // Mengirimkan parameter yang diperlukan ke DoctorDetailPageView
+      return DoctorDetailPageView(
+      nama_dokter: namaDokter,
+    );
+  },
+      binding: DoctorDetailPageBinding(),
+)
+
+
   ];
 }

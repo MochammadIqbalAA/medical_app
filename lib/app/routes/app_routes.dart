@@ -10,6 +10,7 @@ abstract class Routes {
   static const FORUM = _Paths.FORUM;
   static const FIND_US_PAGE = _Paths.FIND_US_PAGE;
   static const CONNECTION = _Paths.CONNECTION;
+  static const DOCTOR_DETAIL_PAGE = _Paths.DOCTOR_DETAIL_PAGE;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const FORUM = '/forum';
   static const FIND_US_PAGE = '/find-us-page';
   static const CONNECTION = '/connection';
+  static const DOCTOR_DETAIL_PAGE = '/doctor-detail-page';
 }

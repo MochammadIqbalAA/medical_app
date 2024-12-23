@@ -1,3 +1,4 @@
+// lib/app/modules/home/views/home_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:myapp/app/page/home_page.dart';
 import 'package:myapp/app/modules/appointment/views/appointment_page.dart';
 import 'package:myapp/app/modules/Forum/views/ForumPage.dart';
 import 'package:myapp/app/modules/FindUsPage/views/find_us_page_view.dart';
+import 'package:myapp/app/modules/DoctorDetailPage/views/doctor_detail_page_view.dart'; // Impor halaman DoctorDetailPage
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,17 +20,12 @@ class HomeView extends StatelessWidget {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hi, Diddy!', style: TextStyle(fontSize: 18)),
+            Text('Hi, Friends !', style: TextStyle(fontSize: 18)),
             Text('How Are you today?', style: TextStyle(fontSize: 14)),
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Tambahkan fungsi notifikasi di sini
-            },
-          ),
+          
           IconButton(
             icon: const Icon(Icons.forum),
             onPressed: () {
@@ -122,7 +119,9 @@ class HomeView extends StatelessWidget {
               onPressed: () {
                 Get.to(FindUsPage());
               },
-              child: const Text('Find Us', style: TextStyle(fontSize: 18)),
+              child: const Text('Find Us',
+                  style: TextStyle(
+                      fontSize: 18, color: Color.fromARGB(255, 141, 205, 235))),
             ),
           ],
         ),
@@ -242,7 +241,10 @@ class HomeView extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.arrow_forward_ios),
               onPressed: () {
-                // Navigasi ke detail dokter
+                // Navigasi ke halaman DoctorDetailPage
+                Get.to(() => DoctorDetailPageView(
+                      nama_dokter: name,
+                    ));
               },
             ),
           ],
