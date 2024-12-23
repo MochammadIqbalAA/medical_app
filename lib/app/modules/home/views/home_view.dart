@@ -8,6 +8,8 @@ import 'package:myapp/app/modules/appointment/views/appointment_page.dart';
 import 'package:myapp/app/modules/Forum/views/ForumPage.dart';
 import 'package:myapp/app/modules/FindUsPage/views/find_us_page_view.dart';
 import 'package:myapp/app/modules/DoctorDetailPage/views/doctor_detail_page_view.dart'; // Impor halaman DoctorDetailPage
+import 'package:myapp/app/modules/ProfileMenu/views/profile_menu_view.dart';
+
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -152,7 +154,7 @@ class HomeView extends StatelessWidget {
           if (index == 2) {
             Get.to(HomePage());
           } else if (index == 3) {
-            Get.to(ProfileView());
+            Get.to(ProfileMenuView());
           } else if (index == 1) {
             Navigator.push(
               context,

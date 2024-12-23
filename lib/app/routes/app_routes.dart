@@ -11,6 +11,9 @@ abstract class Routes {
   static const FIND_US_PAGE = _Paths.FIND_US_PAGE;
   static const CONNECTION = _Paths.CONNECTION;
   static const DOCTOR_DETAIL_PAGE = _Paths.DOCTOR_DETAIL_PAGE;
+  static const PROFILE_MENU = _Paths.PROFILE_MENU;
+  static const LAB_TEST_RESULT = _Paths.LAB_TEST_RESULT;
+  static const FAQ = _Paths.FAQ;
 }
 
 abstract class _Paths {
@@ -23,4 +26,7 @@ abstract class _Paths {
   static const FIND_US_PAGE = '/find-us-page';
   static const CONNECTION = '/connection';
   static const DOCTOR_DETAIL_PAGE = '/doctor-detail-page';
+  static const PROFILE_MENU = '/profile-menu';
+  static const LAB_TEST_RESULT = '/lab-test-result';
+  static const FAQ = '/faq';
 }

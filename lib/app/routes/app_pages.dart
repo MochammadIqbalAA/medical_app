@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../modules/DoctorDetailPage/bindings/doctor_detail_page_binding.dart';
 import '../modules/DoctorDetailPage/views/doctor_detail_page_view.dart';
 import '../modules/FindUsPage/bindings/find_us_page_binding.dart';
@@ -9,6 +10,8 @@ import '../modules/appointment/bindings/appointment_binding.dart';
 import '../modules/appointment/views/appointment_page.dart';
 import '../modules/connection/bindings/connection_binding.dart';
 import '../modules/connection/views/connection_view.dart';
+import '../modules/faq/bindings/faq_binding.dart';
+import '../modules/faq/views/faq_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login_page/bindings/login_page_binding.dart';
@@ -55,24 +58,27 @@ class AppPages {
       binding: FindUsPageBinding(),
     ),
     GetPage(
+      name: _Paths.DOCTOR_DETAIL_PAGE,
+      page: () {
+        // Mengambil parameter yang diperlukan untuk halaman ini
+        final namaDokter = Get.parameters['nama_dokter'] ?? 'Unknown Doctor';
+
+        // Mengirimkan parameter yang diperlukan ke DoctorDetailPageView
+        return DoctorDetailPageView(
+          nama_dokter: namaDokter,
+        );
+      },
+      binding: DoctorDetailPageBinding(),
+    ),
+    GetPage(
       name: _Paths.CONNECTION,
       page: () => ConnectionView(),
       binding: ConnectionBinding(),
     ),
     GetPage(
-      name: _Paths.DOCTOR_DETAIL_PAGE,
-      page: () {
-      // Mengambil parameter yang diperlukan untuk halaman ini
-      final namaDokter = Get.parameters['nama_dokter'] ?? 'Unknown Doctor';
-
-      // Mengirimkan parameter yang diperlukan ke DoctorDetailPageView
-      return DoctorDetailPageView(
-      nama_dokter: namaDokter,
-    );
-  },
-      binding: DoctorDetailPageBinding(),
-)
-
-
+      name: _Paths.FAQ,
+      page: () => FAQView(),
+      binding: FaqBinding(),
+    ),
   ];
 }

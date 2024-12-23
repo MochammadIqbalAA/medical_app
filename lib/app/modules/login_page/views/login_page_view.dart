@@ -20,7 +20,8 @@ class LoginPageView extends StatelessWidget {
             fontWeight: FontWeight.bold, // Make title bold
           ),
         ),
-        backgroundColor: Color.fromARGB(244, 90, 97, 234), // Darker app bar color
+        backgroundColor: Color.fromARGB(244, 90, 97, 234),
+        automaticallyImplyLeading: false, 
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
