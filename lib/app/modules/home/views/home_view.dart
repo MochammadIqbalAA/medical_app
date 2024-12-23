@@ -150,7 +150,7 @@ class HomeView extends StatelessWidget {
         selectedItemColor: const Color(0xFF151855),
         unselectedItemColor: Colors.grey,
         onTap: (index) {
-          if (index == 3) {
+          if (index == 2) {
             Get.to(HomePage());
           } else if (index == 3) {
             Get.to(ProfileView());
